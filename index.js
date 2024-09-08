@@ -11,14 +11,15 @@ app.set('views', './views');
 //End PUG
 
 
-app.get('/', (req, res) => {
-    res.render('client/pages/home/index');
-});
+//Start cấu hình routes
+// Import the routes module
+const routesClient = require('./routes/client/index.route');
+
+// Use the index function to set up routes
+routesClient.index(app);
+//End cấu hình routes
 
 
-app.get('/products', (req, res) => {
-    res.render('client/pages/products/index');
-});
 
 // Start the server
 app.listen(port, () => {
