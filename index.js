@@ -1,6 +1,16 @@
+require('dotenv').config();
 const express = require('express');//  imports the Express module
 const app = express();// initialize an Express application instance.
-const port = 3000;
+
+// Accessing environment variables
+const port = process.env.PORT || 9999;
+
+
+const dbHost = process.env.DB_HOST;
+console.log(`Connecting to database at ${dbHost} từ file .env`);
+
+
+
 
 //Start PUG
 // Set the view(template) engine to Pug
