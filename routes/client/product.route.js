@@ -1,27 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-// Route for viewing products
-router.get('/', (req, res) => {
-    res.render('client/pages/products/index');
-});
+// Import the controller functions
+const productController = require('../../controllers/client/product.controller');
 
+// Route for viewing products
+router.get('/', productController.viewProducts);
 
 // Route for creating a product
-router.post('/create', (req, res) => {
-    res.render('client/pages/products/create');
-});
+router.post('/create', productController.createProduct);
 
 // Route for editing a product
-router.patch('/edit', (req, res) => {
-    res.render('client/pages/products/edit');
-});
+router.patch('/edit', productController.editProduct);
 
 // Route for deleting a product
-router.delete('/delete', (req, res) => {
-    res.render('client/pages/products/delete');
-});
-
+router.delete('/delete', productController.deleteProduct);
 
 // Export the router
 module.exports = router;
