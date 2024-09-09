@@ -1,0 +1,1 @@
+console.log('Ok client side project 1')

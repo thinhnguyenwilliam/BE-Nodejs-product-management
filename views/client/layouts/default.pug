@@ -2,12 +2,36 @@ doctype html
 html
   head
     title #{pageTitle}
+
+    //-  Bootstrap CSS
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css')
+    //-  End Bootstrap CSS
+
+
+    //- nhúng css tĩnh
+    //- đi từ directory 'public'
+    link(rel='stylesheet', href='styles/style.css')
   body
     include ../partials/header.pug
 
     main
       block content
+      br
+      button.btn.btn-success(type='button') test boostrap xem có render được không
 
     include ../partials/footer.pug
+
+    //- nhúng hình ảnh tĩnh
+    //- đi từ directory 'public'
+    img(src='/images/logo.svg', alt='Logo nếu bị hư hi hi')
+
+    //- nhúng JS tĩnh
+    //- đi từ directory 'public'
+    script(src='/scripts/main.js')
+
+    //-  Bootstrap JavaScript 
+    script(src='https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js')
+    //-  End Bootstrap JavaScript
 
     

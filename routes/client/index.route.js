@@ -5,7 +5,7 @@ const homeRoutes = require('./home.route');
 
 
 
-module.exports.index = (app) => {
+module.exports = (app) => {
     app.use('/',homeRoutes);
 
 

@@ -9,7 +9,9 @@ const port = process.env.PORT || 9999;
 const dbHost = process.env.DB_HOST;
 console.log(`Connecting to database at ${dbHost} từ file .env`);
 
-
+// nhúng file tĩnh, cái trong thư muc public(hình ảnh,css,js)
+// Serve static files from the "public" directory
+app.use(express.static('public'));
 
 
 //Start PUG
@@ -24,9 +26,7 @@ app.set('views', './views');
 //Start cấu hình routes
 // Import the routes module
 const routesClient = require('./routes/client/index.route');
-
-// Use the index function to set up routes
-routesClient.index(app);
+routesClient(app);
 //End cấu hình routes
 
 
