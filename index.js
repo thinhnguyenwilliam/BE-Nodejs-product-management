@@ -2,12 +2,22 @@ require('dotenv').config();
 const express = require('express');//  imports the Express module
 const app = express();// initialize an Express application instance.
 
+
 // Accessing environment variables
 const port = process.env.PORT || 9999;
 
 
 const dbHost = process.env.DB_HOST;
 console.log(`Connecting to database at ${dbHost} từ file .env`);
+
+
+// Connect to MongoDB
+//lưu ý đặt tên collection(products) trong mongoDb
+const mongoUrl = process.env.MONGO_URL;
+console.log(`cái đường dẫn ${mongoUrl} từ file .env`);
+const coSoDuLieu=require('./config/database');
+coSoDuLieu.connect();
+
 
 // nhúng file tĩnh, cái trong thư muc public(hình ảnh,css,js)
 // Serve static files from the "public" directory
