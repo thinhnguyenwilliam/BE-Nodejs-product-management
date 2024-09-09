@@ -1,8 +1,108 @@
-h1{
-    color: green;
-}
+@import './variables';
 
-img{
-    width: 20vw;
-    height: 20vh; 
+
+/* Header */
+.header {
+  border-bottom: 1px solid $border-color;
+  padding: $padding-default 0;
+
+  .inner-logo img {
+    max-height: 50px;
+    max-width: 100%;
+  }
+
+  .inner-menu {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+
+      li {
+        margin-left: 20px;
+
+        a {
+          // Add additional link styles if needed
+        }
+      }
+    }
+  }
 }
+/* End Header */
+
+/* Footer */
+.footer {
+  background: $footer-bg;
+  color: $footer-text;
+  text-align: center;
+  padding: $padding-default;
+}
+/* End Footer */
+
+/* Box Head */
+.box-head {
+  margin-bottom: 30px;
+
+  .inner-title {
+    margin-bottom: 0;
+    font-size: $font-size-large;
+    font-weight: $font-weight-bold;
+    color: $primary-green;
+  }
+}
+/* End Box Head */
+
+/* Product Item */
+.product-item {
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  overflow: hidden;
+
+  .inner-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-bottom: 1px solid $border-color;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .inner-content {
+    padding: 15px;
+
+    .inner-title {
+      font-size: $font-size-medium;
+      font-weight: $font-weight-bold;
+    }
+
+    .inner-price-new {
+      font-size: $font-size-small;
+      font-weight: $font-weight-bold;
+      color: $primary-green;
+    }
+
+    .inner-price-old {
+      font-size: $font-size-small;
+      font-weight: $font-weight-bold;
+      color: $primary-red;
+      text-decoration: line-through;
+    }
+
+    .inner-discount {
+      font-size: $font-size-extra-small;
+      font-weight: $font-weight-bold;
+      color: white;
+      background: $primary-red;
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: $border-radius;
+    }
+  }
+}
+/* End Product Item */

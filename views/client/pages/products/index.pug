@@ -1,8 +1,30 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/box-head.pug
 
 
 block content
-  | Phần main
-  br
-  span trang chủ danh sách sản phẩm Đà Nẵng
+  .container.my-3
+    +box-head("Danh sách sản phẩm")
+
+    .row
+      //- Product Item 1
+      .col-6.mb-3
+        .product-item
+          .inner-image
+            img(src="https://cdn.dummyjson.com/products/images/smartphones/iPhone%206/thumbnail.png", alt="iPhone 9")
+          .inner-content
+            h3.inner-title iPhone 9
+            .inner-price-new 80$
+            .inner-price-old 100$
+            .inner-discount -20%
+
+      //- Product Item 2
+      .col-6.mb-3
+        .product-item
+          .inner-image
+            img(src="https://cdn.dummyjson.com/products/images/smartphones/iPhone%2013%20Pro/thumbnail.png", alt="iPhone 9")
+          .inner-content
+            h3.inner-title iPhone 9
+            .inner-price-new 80$
+            .inner-price-old 100$
+            .inner-discount -20%
