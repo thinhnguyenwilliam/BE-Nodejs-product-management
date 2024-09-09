@@ -7,9 +7,6 @@ const app = express();// initialize an Express application instance.
 const port = process.env.PORT || 9999;
 
 
-const dbHost = process.env.DB_HOST;
-console.log(`Connecting to database at ${dbHost} từ file .env`);
-
 
 // Connect to MongoDB
 //lưu ý đặt tên collection(products) trong mongoDb
