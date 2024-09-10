@@ -31,7 +31,11 @@ app.set('views', './views');
 
 
 //Start cấu hình routes
-// Import the routes module
+// Import the routes module -- admin, nhúng admin trước client, ưu tiên admin
+const routesAdmin = require('./routes/admin/index.route');
+routesAdmin(app);
+
+// Import the routes module -- client
 const routesClient = require('./routes/client/index.route');
 routesClient(app);
 //End cấu hình routes
