@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');//  imports the Express module
 const app = express();// initialize an Express application instance.
+const systemConfig=require('./config/system');
 
 
 // Accessing environment variables
@@ -28,6 +29,13 @@ app.set('view engine', 'pug');
 // Set the directory where the Pug templates are located
 app.set('views', './views');
 //End PUG
+
+
+// Define global variable
+// prefixAdmin is a variable can use in PUG file
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+
+
 
 
 //Start cấu hình routes

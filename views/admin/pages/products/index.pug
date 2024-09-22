@@ -1,0 +1,59 @@
+extends ../../layouts/default.pug
+
+block main
+  h1 Danh sách sản phẩm
+
+  .card.mb-3
+    .card-header Bộ lọc và tìm kiếm
+    .card-body
+      .row
+        .col-4
+          | Bộ lọc
+          //- Status filter dropdown form
+          select(box-filter class="form-control")
+            option(value="") Tất cả
+            option(value="active") Hoạt động
+            option(value="inactive") Dừng hoạt động
+        .col-8
+          | Tìm kiếm
+
+  .card
+    .card-header Danh sách sản phẩm
+    .card-body
+      //- Products table
+      table.table.table-hover.table-sm.mt-3
+        thead
+          tr
+            th STT
+            th Hình ảnh
+            th Tiêu đề
+            th Giá
+            th Trạng thái
+            th Hành động
+
+        tbody
+          each item, index in danhSachVer2
+            tr 
+              td #{index + 1}
+              td
+                img(
+                  src=item.thumbnail
+                  alt=item.title
+                  width="100px"
+                  height="auto"
+                )
+              td #{item.title}
+              td #{item.price}$
+
+              //- Status field
+              td
+                if item.status == "active"
+                  span.badge.badge-success Hoạt động
+                else if item.status == "inactive"
+                  span.badge.badge-danger Dừng hoạt động
+              
+
+              //- Action buttons
+              td
+                a.btn.btn-warning.btn-sm(href=`/admin/products/edit/${item._id}`) Sửa
+                a.btn.btn-danger.btn-sm.ml-1(href=`/admin/products/delete/${item._id}`) Xóa
