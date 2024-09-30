@@ -1,7 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-filter.pug
 
-
 block main
   h1 Danh sách sản phẩm
   .card.mb-3
@@ -10,27 +9,23 @@ block main
       .row
         .col-4
           | Bộ lọc
-          //- Status filter dropdown form
-          //- sau hàm mixins kg có ; nha
-          //- array thì phải viết trong 1 dòng trong PUG file
-          //- object riêng lẻ thì có thể viết nhiều dòng trong PUG file
-          //- có thể xài cách anh Nam trong file code ảnh, ảnh kg khai báo biến mà xài thẳng array vào hàm
-          //- - const options = [{ value: '', text: 'Tất cả' },{ value: 'active', text: 'Hoạt động' }, { value: 'inactive', text: 'Dừng hoạt động' }];
-          //- +selectOptions(options, "form-control")
-          +selectOptions([
-            {
-              text: "Tất cả",
-              value: ""
-            },
-            {
-              text: "Hoạt động",
-              value: "active"
-            },
-            {
-              text: "Dừng hoạt động",
-              value: "inactive"
-            }
-          ],"form-control")
+          - 
+            const options = [
+              { 
+                value: '', 
+                text: 'Tất cả' 
+              },
+              { 
+                value: 'active', 
+                text: 'Hoạt động' 
+              }, 
+              { 
+                value: 'inactive', 
+                text: 'Dừng hoạt động' 
+              }
+            ];
+          - const className = "form-control";
+          +selectOptions(options, className)
 
         .col-8
           | Tìm kiếm
@@ -39,7 +34,6 @@ block main
   .card
     .card-header Danh sách sản phẩm
     .card-body
-      //- Products table
       table.table.table-hover.table-sm.mt-3
         thead
           tr
@@ -63,16 +57,27 @@ block main
                 )
               td #{item.title}
               td #{item.price}$
-
-              //- Status field
               td
                 if item.status == "active"
                   span.badge.badge-success Hoạt động
                 else if item.status == "inactive"
                   span.badge.badge-danger Dừng hoạt động
-              
-
-              //- Action buttons
               td
                 a.btn.btn-warning.btn-sm(href=`/admin/products/edit/${item._id}`) Sửa
                 a.btn.btn-danger.btn-sm.ml-1(href=`/admin/products/delete/${item._id}`) Xóa
+
+  //- Pagination controls
+  nav.mt-3
+    ul.pagination
+      if currentPage > 1
+        li.page-item
+          button.page-link(button-pagination=currentPage-1) Trang trước
+      each pageNumber in [...Array(totalPage).keys()].map(n => n + 1)
+        li.page-item
+          button.page-link(button-pagination=pageNumber) #{pageNumber}
+      if currentPage < totalPage
+        li.page-item
+          button.page-link(button-pagination=currentPage+1) Kế tiếp
+
+
+

@@ -5,34 +5,34 @@ console.log('Đang vào admin server side');
 const boxFilter = document.querySelector("[box-filter]");
 //console.log(boxFilter);
 if (boxFilter) {
-    //xem phần khi lần đầu vào trang chưa làm gì cả, nằm ở dưới ấy
+  //xem phần khi lần đầu vào trang chưa làm gì cả, nằm ở dưới ấy
 
-    let url = new URL(location.href); // Nhân bản url
+  let url = new URL(location.href); // Nhân bản url
 
-    // Bắt sự kiện onChange
-    boxFilter.addEventListener("change", () => {
-        const value = boxFilter.value;
-        //console.log(value);
+  // Bắt sự kiện onChange
+  boxFilter.addEventListener("change", () => {
+    const value = boxFilter.value;
+    //console.log(value);
 
-        if (value)
-            url.searchParams.set("status", value);
-        else
-            url.searchParams.delete("status");
-        
-        //console.log(url);
-        //console.log(url.href);
-        // Redirect the page with the new filter
-        location.href = url.href;
-    })
+    if (value)
+      url.searchParams.set("status", value);
+    else
+      url.searchParams.delete("status");
+
+    //console.log(url);
+    //console.log(url.href);
+    // Redirect the page with the new filter
+    location.href = url.href;
+  })
 
 
-    // url có gì thì in ra cái field đó hiện ra để dễ xem
-    // Hiển thị lựa chọn mặc định, khi lần đầu vào trang chưa làm gì cả
-    // Set the default value in the filter dropdown
-    const statusCurrent = url.searchParams.get("status");
-    if (statusCurrent) 
-        boxFilter.value = statusCurrent;
-    
+  // url có gì thì in ra cái field đó hiện ra để dễ xem
+  // Hiển thị lựa chọn mặc định, khi lần đầu vào trang chưa làm gì cả
+  // Set the default value in the filter dropdown
+  const statusCurrent = url.searchParams.get("status");
+  if (statusCurrent)
+    boxFilter.value = statusCurrent;
+
 }
 // Hết Bộ lọc
 
@@ -67,3 +67,31 @@ if (formSearch) {
   }
 }
 // Hết Tìm kiếm
+
+
+// Phân trang
+// Pagination Logic
+document.querySelectorAll("[button-pagination]").forEach(button => {
+  button.addEventListener("click", () => {
+    const page = button.getAttribute("button-pagination");
+    const url = new URL(window.location);
+
+    if (page) {
+      url.searchParams.set("page", page);
+    } else {
+      url.searchParams.delete("page");
+    }
+
+    window.location = url.href;
+  });
+});
+
+// Highlight Active Page
+const currentPage = new URLSearchParams(window.location.search).get("page") || 1;
+const currentButton = document.querySelector(`[button-pagination="${currentPage}"]`);
+
+if (currentButton) {
+  currentButton.parentNode.classList.add("active");
+}
+
+// Hết Phân trang

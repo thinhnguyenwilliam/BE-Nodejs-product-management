@@ -28,13 +28,33 @@ module.exports.viewProduct = async (req, res) => {
     //end search
 
 
+    //pagination
+    const page = parseInt(req.query.page) || 1;
+    //console.log(page);
+
+    const pageSize = 4; // Number of products per page
+    if(req.query.limit)
+        pageSize=parseInt(req.query.limit);
+
+    const skip = (page - 1) * pageSize;// bắt đầu từ vị trí 0 trong database    
+    //end pagination
 
 
-    const danhSachSanPham = await ProductModel.find(objectFind);
+
+    // Count total products
+    const totalProducts = await ProductModel.countDocuments(objectFind);
+    const totalPages = Math.ceil(totalProducts / pageSize);
+
+    // Fetch products for the current page
+    const danhSachSanPham = await ProductModel.find(objectFind)
+        .skip(skip)
+        .limit(pageSize);
     //console.log('test xem có danh sách sản phẩm không: ',danhSachSanPham);
 
     res.render('admin/pages/products/index', {
         pageTitle: 'Trang product của admin',
         danhSachVer2: danhSachSanPham,
+        currentPage: page,
+        totalPage: totalPages
     });
 };
