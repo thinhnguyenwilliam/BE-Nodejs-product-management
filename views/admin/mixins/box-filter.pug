@@ -1,0 +1,4 @@
+mixin selectOptions(options, selectClass)
+  select(box-filter class=selectClass)
+    each option in options
+      option(value=option.value) #{option.text}

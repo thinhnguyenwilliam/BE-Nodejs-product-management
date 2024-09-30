@@ -1,8 +1,9 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-filter.pug
+
 
 block main
   h1 Danh sách sản phẩm
-
   .card.mb-3
     .card-header Bộ lọc và tìm kiếm
     .card-body
@@ -10,25 +11,30 @@ block main
         .col-4
           | Bộ lọc
           //- Status filter dropdown form
-          select(box-filter class="form-control")
-            option(value="") Tất cả
-            option(value="active") Hoạt động
-            option(value="inactive") Dừng hoạt động
+          //- sau hàm mixins kg có ; nha
+          //- array thì phải viết trong 1 dòng trong PUG file
+          //- object riêng lẻ thì có thể viết nhiều dòng trong PUG file
+          //- có thể xài cách anh Nam trong file code ảnh, ảnh kg khai báo biến mà xài thẳng array vào hàm
+          //- - const options = [{ value: '', text: 'Tất cả' },{ value: 'active', text: 'Hoạt động' }, { value: 'inactive', text: 'Dừng hoạt động' }];
+          //- +selectOptions(options, "form-control")
+          +selectOptions([
+            {
+              text: "Tất cả",
+              value: ""
+            },
+            {
+              text: "Hoạt động",
+              value: "active"
+            },
+            {
+              text: "Dừng hoạt động",
+              value: "inactive"
+            }
+          ],"form-control")
+
         .col-8
           | Tìm kiếm
-          form(form-search)
-            .input-group
-              input(
-                type="text"
-                placeholder="Nhập từ khóa"
-                name="keyword"
-                class="form-control"
-              )
-              .input-group-append
-                button(
-                  class="btn btn-success"
-                  type="submit"
-                ) Tìm
+          include ../../partials/box-search.pug
 
   .card
     .card-header Danh sách sản phẩm
