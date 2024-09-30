@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-filter.pug
+include ../../mixins/pagination.pug
 
 block main
   h1 Danh sách sản phẩm
@@ -67,17 +68,8 @@ block main
                 a.btn.btn-danger.btn-sm.ml-1(href=`/admin/products/delete/${item._id}`) Xóa
 
   //- Pagination controls
-  nav.mt-3
-    ul.pagination
-      if currentPage > 1
-        li.page-item
-          button.page-link(button-pagination=currentPage-1) Trang trước
-      each pageNumber in [...Array(totalPage).keys()].map(n => n + 1)
-        li.page-item
-          button.page-link(button-pagination=pageNumber) #{pageNumber}
-      if currentPage < totalPage
-        li.page-item
-          button.page-link(button-pagination=currentPage+1) Kế tiếp
+  //- Usage of the pagination mixin
+  +pagination(currentPage, totalPage)
 
 
 

@@ -1,0 +1,13 @@
+//- Mixin for Pagination
+mixin pagination(currentPage, totalPage)
+  nav.mt-3
+    ul.pagination
+      if currentPage > 1
+        li.page-item
+          button.page-link(button-pagination=currentPage-1) Trang trước
+      each pageNumber in [...Array(totalPage).keys()].map(n => n + 1)
+        li.page-item
+          button.page-link(button-pagination=pageNumber) #{pageNumber}
+      if currentPage < totalPage
+        li.page-item
+          button.page-link(button-pagination=currentPage+1) Kế tiếp
