@@ -60,9 +60,17 @@ block main
               td #{item.price}$
               td
                 if item.status == "active"
-                  span.badge.badge-success Hoạt động
+                  button.badge.badge-success(
+                    item-id=item.id,
+                    button-change-status="inactive",
+                    data-path=`/${prefixAdmin}/products/change-status`
+                  ) Hoạt động
                 else if item.status == "inactive"
-                  span.badge.badge-danger Dừng hoạt động
+                  button.badge.badge-danger(
+                    item-id=item.id,
+                    button-change-status="active",
+                    data-path=`/${prefixAdmin}/products/change-status`
+                  ) Dừng hoạt động
               td
                 a.btn.btn-warning.btn-sm(href=`/admin/products/edit/${item._id}`) Sửa
                 a.btn.btn-danger.btn-sm.ml-1(href=`/admin/products/delete/${item._id}`) Xóa

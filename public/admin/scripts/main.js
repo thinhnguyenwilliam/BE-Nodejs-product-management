@@ -95,3 +95,45 @@ if (currentButton) {
 }
 
 // Hết Phân trang
+
+
+// Change status functionality
+const listButtonChangeStatus = document.querySelectorAll("[button-change-status]");
+
+if (listButtonChangeStatus.length > 0) {
+  listButtonChangeStatus.forEach(button => {
+    button.addEventListener("click", () => {
+      //console.log(button);
+      const itemId = button.getAttribute("item-id"); // Get the item ID
+      //console.log(itemId);
+      const statusChange = button.getAttribute("button-change-status"); // Get the new status to change to
+      //console.log(statusChange);
+      const path = button.getAttribute("data-path"); // Get the API endpoint path
+      //console.log(path);
+
+      // Prepare the data object
+      const data = {
+        id: itemId,
+        status: statusChange
+      };
+      //console.log(data);
+
+      // Make the fetch request to update the status
+      fetch(path, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH", // Use PATCH to update the resource
+        body: JSON.stringify(data) // Convert the data object to a JSON string
+      })
+        .then(res => res.json()) // Parse the response as JSON into object of JS, if BE response something to FE
+        .then(data => {
+          if (data.code == "success") {
+            location.reload(); // Reload the page on success to reflect the new status
+          }
+        })
+        .catch(error => console.error('Error:', error)); // Handle errors gracefully
+    });
+  });
+}
+// End of change status functionality

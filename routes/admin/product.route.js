@@ -6,7 +6,7 @@ const productController = require('../../controllers/admin/product.controller');
 
 
 router.get('/', productController.viewProduct);
-
+router.patch("/change-status", productController.changeStatus);
 
 
 

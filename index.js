@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');//  imports the Express module
+const bodyParser = require('body-parser');
 const app = express();// initialize an Express application instance.
 const systemConfig=require('./config/system');
 
@@ -35,6 +36,9 @@ app.set('views', './views');
 // prefixAdmin is a variable can use in PUG file
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
+
+// parse application/json
+app.use(bodyParser.json());
 
 
 
