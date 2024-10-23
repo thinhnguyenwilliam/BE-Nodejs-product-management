@@ -119,3 +119,30 @@ module.exports.changeStatusForMultiple = async (req, res) => {
         });
     }
 };
+
+
+
+module.exports.deleteProduct = async (req, res) => {
+    try {
+        // Extract product ID from the request params
+        const productId = req.params.id;
+        //console.log(productId);
+
+        // Delete the product from the database
+        await ProductModel.deleteOne({ _id: productId });
+
+        // Send success response to the frontend
+        res.json({
+            code: "success",
+            message: "Xóa sản phẩm thành công!"
+        });
+
+    } catch (error) {
+        // Handle any errors during the deletion process
+        console.error('Error deleting product:', error);
+        res.status(500).json({
+            code: "error",
+            message: "Đã xảy ra lỗi khi xóa sản phẩm!"
+        });
+    }
+};

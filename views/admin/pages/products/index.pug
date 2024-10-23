@@ -92,7 +92,11 @@ block main
                   ) Dừng hoạt động
               td
                 a.btn.btn-warning.btn-sm(href=`/admin/products/edit/${item._id}`) Sửa
-                a.btn.btn-danger.btn-sm.ml-1(href=`/admin/products/delete/${item._id}`) Xóa
+                a.btn.btn-danger.btn-sm.ml-1(
+                  item-id=item._id
+                  button-delete
+                  data-path=`/${prefixAdmin}/products/delete/${item._id}`
+                  ) Xóa
 
   //- Pagination controls
   //- Usage of the pagination mixin

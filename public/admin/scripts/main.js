@@ -192,3 +192,37 @@ if (formChangeMulti) {
   });
 }
 //
+
+
+//xóa vĩnh viễn 1 bản ghi
+const listButtonDelete = document.querySelectorAll("[button-delete]");
+//console.log(listButtonDelete);
+if (listButtonDelete.length > 0) {
+  listButtonDelete.forEach(button => {
+    button.addEventListener("click", () => {
+      const productId = button.getAttribute("item-id");
+      //console.log(productId);
+      const path = button.getAttribute("data-path");
+      //console.log(path);
+
+      // Confirm before deleting
+      const confirmDelete = confirm("Bạn có chắc muốn xóa sản phẩm này không?");
+      if (confirmDelete) {
+        fetch(path, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "DELETE" // Use DELETE method for deletion
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.code === "success") {
+              location.reload(); // Reload the page to reflect the deletion
+            }
+          })
+          .catch(error => console.error('Error:', error)); // Handle errors
+      }
+    });
+  });
+}
+//
