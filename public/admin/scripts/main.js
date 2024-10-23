@@ -212,7 +212,7 @@ if (listButtonDelete.length > 0) {
           headers: {
             "Content-Type": "application/json",
           },
-          method: "DELETE" // Use DELETE method for deletion
+          method: "PATCH" // Use DELETE method for deletion
         })
           .then(res => res.json())
           .then(data => {

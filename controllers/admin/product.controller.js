@@ -128,11 +128,14 @@ module.exports.deleteProduct = async (req, res) => {
         const productId = req.params.id;
         //console.log(productId);
 
-        // Delete the product from the database
-        await ProductModel.deleteOne({ _id: productId });
+        // Soft delete: Update the 'deleted' field to true
+        await ProductModel.updateOne(
+            { _id: productId }, 
+            { deleted: true }
+        );
 
         // Send success response to the frontend
-        res.json({
+        res.json({  
             code: "success",
             message: "Xóa sản phẩm thành công!"
         });
