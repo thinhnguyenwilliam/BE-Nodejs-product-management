@@ -13,7 +13,7 @@ const port = process.env.PORT || 9999;
 // Connect to MongoDB
 //lưu ý đặt tên collection(products) trong mongoDb
 const mongoUrl = process.env.MONGO_URL;
-console.log(`cái đường dẫn ${mongoUrl} từ file .env`);
+//console.log(`cái đường dẫn ${mongoUrl} từ file .env`);
 const coSoDuLieu=require('./config/database');
 coSoDuLieu.connect();
 

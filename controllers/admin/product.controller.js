@@ -89,3 +89,33 @@ module.exports.changeStatus = async (req, res) => {
         });
     }
 };
+
+
+
+module.exports.changeStatusForMultiple = async (req, res) => {
+    //console.log(req.body);
+    try {
+        // Extract product IDs and new status from the request body
+        const { ids, status } = req.body;
+
+        // Update the status for multiple products using the $in operator
+        await ProductModel.updateMany(
+            { _id: { $in: ids } }, // Query: find all products where _id is in the provided array
+            { status: status } // Update: set the new status
+        );
+
+        // Send success response to the frontend
+        res.json({
+            code: "success",
+            message: "Đổi trạng thái thành công cho nhiều sản phẩm!"
+        });
+
+    } catch (error) {
+        // Handle any errors that may occur during the update process
+        console.error('Error changing status for multiple products:', error);
+        res.status(500).json({
+            code: "error",
+            message: "Đã xảy ra lỗi khi đổi trạng thái cho nhiều sản phẩm!"
+        });
+    }
+};

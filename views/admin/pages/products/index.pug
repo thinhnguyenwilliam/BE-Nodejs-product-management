@@ -35,9 +35,23 @@ block main
   .card
     .card-header Danh sách sản phẩm
     .card-body
-      table.table.table-hover.table-sm.mt-3
+      .row.mb-3
+        .col-6
+          form(
+            form-change-multi
+            data-path=`/${prefixAdmin}/products/change-multi`
+          )
+            .input-group
+              select(name="status" class="form-control")
+                option(value="active") Hoạt động
+                option(value="inactive") Dừng hoạt động
+              .input-group-append
+                button.btn.btn-success(type="submit") Áp dụng
+
+      table.table.table-hover.table-sm
         thead
           tr
+            th
             th STT
             th Hình ảnh
             th Tiêu đề
@@ -48,6 +62,11 @@ block main
         tbody
           each item, index in danhSachVer2
             tr 
+              td
+                input(
+                  type="checkbox"
+                  input-change=item.id
+                )
               td #{index + 1}
               td
                 img(

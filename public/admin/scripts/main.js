@@ -97,6 +97,7 @@ if (currentButton) {
 // Hết Phân trang
 
 
+
 // Change status functionality
 const listButtonChangeStatus = document.querySelectorAll("[button-change-status]");
 
@@ -128,7 +129,7 @@ if (listButtonChangeStatus.length > 0) {
       })
         .then(res => res.json()) // Parse the response as JSON into object of JS, if BE response something to FE
         .then(data => {
-          if (data.code == "success") {
+          if (data.code === "success") {
             location.reload(); // Reload the page on success to reflect the new status
           }
         })
@@ -137,3 +138,57 @@ if (listButtonChangeStatus.length > 0) {
   });
 }
 // End of change status functionality
+
+
+
+
+// Change status for multiple products
+const formChangeMulti = document.querySelector("[form-change-multi]");
+
+if (formChangeMulti) {
+  //console.log(formChangeMulti);
+  formChangeMulti.addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent the form from submitting the traditional way
+
+    // Get the form action path and selected status
+    const path = formChangeMulti.getAttribute("data-path");
+    //console.log(path);
+
+    const status = formChangeMulti.status.value;
+    //console.log(status);
+
+    // Collect the IDs of all checked products
+    const ids = [];
+    const listInputChangeChecked = document.querySelectorAll("[input-change]:checked");
+    listInputChangeChecked.forEach(input => {
+      const id = input.getAttribute("input-change");
+      ids.push(id); // Push each product ID into the 'ids' array
+    });
+    //console.log(ids);
+
+    // Prepare the data to be sent in the request
+    const data = {
+      ids: ids,
+      status: status
+    };
+    //console.log(data);
+
+    // Make the fetch request to update the status for multiple products
+    fetch(path, {
+      headers: {
+        "Content-Type": "application/json", // Set request header to JSON
+      },
+      method: "PATCH", // Use PATCH for updating
+      body: JSON.stringify(data) // Convert data to JSON string
+    })
+      .then(res => res.json()) // Parse the response as JSON
+      .then(data => {
+        //console.log(data);
+        if (data.code === "success") {
+          location.reload(); // Reload the page to reflect changes on success
+        }
+      })
+      .catch(error => console.error('Error:', error)); // Handle any errors
+  });
+}
+//
