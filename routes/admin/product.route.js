@@ -11,8 +11,14 @@ router.patch("/change-multi", productController.changeStatusForMultiple);
 
 
 // Define the DELETE route for Soft deleting a product by ID- xóa mềm
-router.patch('/delete/:id', productController.deleteProduct);
+router.patch('/delete/:ids', productController.deleteProduct);
 
+// làm trang thùng rác
+router.get('/trash', productController.getDeletedProducts);
+
+
+// Route to restore a deleted product
+router.patch('/restore/:ids', productController.restoreProduct);
 
 
 module.exports = router;

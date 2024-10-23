@@ -125,17 +125,30 @@ module.exports.changeStatusForMultiple = async (req, res) => {
 module.exports.deleteProduct = async (req, res) => {
     try {
         // Extract product ID from the request params
-        const productId = req.params.id;
+        //const productId = req.params.id;
         //console.log(productId);
 
+
+
         // Soft delete: Update the 'deleted' field to true
-        await ProductModel.updateOne(
-            { _id: productId }, 
-            { deleted: true }
+        // await ProductModel.updateOne(
+        //     { _id: productId },
+        //     { deleted: true }
+        // );
+
+
+        // Get product IDs from the query params, split them into an array
+        const productIds = req.params.ids.split(',');
+
+
+        // Soft delete all products by setting `deleted` to true for the provided IDs
+        await ProductModel.updateMany(
+            { _id: { $in: productIds } }, // Match products with these IDs
+            { deleted: true } // Set `deleted` to true
         );
 
         // Send success response to the frontend
-        res.json({  
+        res.json({
             code: "success",
             message: "Xóa sản phẩm thành công!"
         });
@@ -146,6 +159,52 @@ module.exports.deleteProduct = async (req, res) => {
         res.status(500).json({
             code: "error",
             message: "Đã xảy ra lỗi khi xóa sản phẩm!"
+        });
+    }
+};
+
+
+
+module.exports.getDeletedProducts = async (req, res) => {
+    try {
+        // Fetch all products that are soft deleted
+        const deletedProducts = await ProductModel.find({ deleted: true });
+
+        // Respond with the list of deleted products
+        res.json({
+            code: "success",
+            data: deletedProducts
+        });
+    } catch (error) {
+        console.error('Error fetching deleted products:', error);
+        res.status(500).json({
+            code: "error",
+            message: "Đã xảy ra lỗi khi lấy danh sách sản phẩm đã xóa!"
+        });
+    }
+};
+
+
+module.exports.restoreProduct = async (req, res) => {
+    try {
+        //const productId = req.params.id;
+        const productIds = req.params.ids.split(',');
+
+        // Set deleted to false to restore the product
+        await ProductModel.updateMany(
+            { _id: { $in: productIds } }, // Match products with these IDs
+            { deleted: false } 
+        );
+
+        res.json({
+            code: "success",
+            message: "Sản phẩm đã được khôi phục!"
+        });
+    } catch (error) {
+        console.error('Error restoring product:', error);
+        res.status(500).json({
+            code: "error",
+            message: "Đã xảy ra lỗi khi khôi phục sản phẩm!"
         });
     }
 };
