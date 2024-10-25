@@ -157,14 +157,29 @@ if (formChangeMulti) {
     const status = formChangeMulti.status.value;
     //console.log(status);
 
+
+
     // Collect the IDs of all checked products
     const ids = [];
     const listInputChangeChecked = document.querySelectorAll("[input-change]:checked");
     listInputChangeChecked.forEach(input => {
-      const id = input.getAttribute("input-change");
-      ids.push(id); // Push each product ID into the 'ids' array
+      ids.push(input.getAttribute("input-change")); // Push each product ID into the 'ids' array
     });
     //console.log(ids);
+
+
+    // Alert if no items are selected
+    if (ids.length === 0) {
+      alert("Vui lòng chọn ít nhất một mục.");
+      return;
+    }
+
+    // Confirm delete action
+    if (status === "delete") {
+      const isConfirm = confirm("Bạn có chắc muốn xóa những bản ghi này?");
+      if (!isConfirm) return;
+    }
+
 
     // Prepare the data to be sent in the request
     const data = {
@@ -183,9 +198,9 @@ if (formChangeMulti) {
     })
       .then(res => res.json()) // Parse the response as JSON
       .then(data => {
-        //console.log(data);
+        console.log(data.message);
         if (data.code === "success") {
-          location.reload(); // Reload the page to reflect changes on success
+          //location.reload(); // Reload the page to reflect changes on success
         }
       })
       .catch(error => console.error('Error:', error)); // Handle any errors
@@ -194,7 +209,7 @@ if (formChangeMulti) {
 //
 
 
-//xóa vĩnh viễn 1 bản ghi
+//soft delete 1 bản ghi
 const listButtonDelete = document.querySelectorAll("[button-delete]");
 //console.log(listButtonDelete);
 if (listButtonDelete.length > 0) {

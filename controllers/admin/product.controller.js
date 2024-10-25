@@ -93,25 +93,50 @@ module.exports.changeStatus = async (req, res) => {
 
 
 module.exports.changeStatusForMultiple = async (req, res) => {
-    //console.log(req.body);
     try {
-        // Extract product IDs and new status from the request body
         const { ids, status } = req.body;
 
-        // Update the status for multiple products using the $in operator
-        await ProductModel.updateMany(
-            { _id: { $in: ids } }, // Query: find all products where _id is in the provided array
-            { status: status } // Update: set the new status
-        );
+        if (!ids || ids.length === 0) {
+            return res.status(400).json({
+                code: "error",
+                message: "Không có sản phẩm nào được chọn!"
+            });
+        }
 
-        // Send success response to the frontend
-        res.json({
-            code: "success",
-            message: "Đổi trạng thái thành công cho nhiều sản phẩm!"
-        });
+        switch (status) {
+            case "delete":
+                // Soft delete by setting `deleted` to true
+                await ProductModel.updateMany(
+                    { _id: { $in: ids } },
+                    { deleted: true }
+                );
+                res.json({
+                    code: "success",
+                    message: "Các sản phẩm đã được xóa mềm thành công!"
+                });
+                break;
 
+            case "active":
+            case "inactive":
+                // Update the status to active or inactive and ensure deleted is false if reactivated
+                await ProductModel.updateMany(
+                    { _id: { $in: ids } },
+                    { status: status, deleted: false }
+                );
+                res.json({
+                    code: "success",
+                    message: `Đổi trạng thái thành công cho nhiều sản phẩm thành ${status}!`
+                });
+                break;
+
+            default:
+                res.status(400).json({
+                    code: "error",
+                    message: "Trạng thái không hợp lệ!"
+                });
+                break;
+        }
     } catch (error) {
-        // Handle any errors that may occur during the update process
         console.error('Error changing status for multiple products:', error);
         res.status(500).json({
             code: "error",
@@ -119,6 +144,7 @@ module.exports.changeStatusForMultiple = async (req, res) => {
         });
     }
 };
+
 
 
 
@@ -193,7 +219,7 @@ module.exports.restoreProduct = async (req, res) => {
         // Set deleted to false to restore the product
         await ProductModel.updateMany(
             { _id: { $in: productIds } }, // Match products with these IDs
-            { deleted: false } 
+            { deleted: false }
         );
 
         res.json({
