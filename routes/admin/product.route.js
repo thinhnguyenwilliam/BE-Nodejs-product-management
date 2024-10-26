@@ -22,4 +22,6 @@ router.get('/trash', productController.getDeletedProducts);
 router.patch('/restore/:ids', productController.restoreProduct);
 
 
+router.patch("/change-position", productController.changePosition);
+
 module.exports = router;

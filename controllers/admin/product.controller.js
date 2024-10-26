@@ -45,9 +45,15 @@ module.exports.viewProduct = async (req, res) => {
     const totalPages = Math.ceil(totalProducts / pageSize);
 
     // Fetch products for the current page
-    const danhSachSanPham = await ProductModel.find(objectFind)
+    const danhSachSanPham = await ProductModel
+        .find(objectFind)
         .skip(skip)
-        .limit(pageSize);
+        .limit(pageSize)
+        .sort({
+            position: -1,
+            title: 1,
+            price: -1
+        });
     //console.log('test xem có danh sách sản phẩm không: ',danhSachSanPham);
 
     res.render('admin/pages/products/index', {
@@ -231,6 +237,38 @@ module.exports.restoreProduct = async (req, res) => {
         res.status(500).json({
             code: "error",
             message: "Đã xảy ra lỗi khi khôi phục sản phẩm!"
+        });
+    }
+};
+
+
+module.exports.changePosition = async (req, res) => {
+    try {
+        const { id, position } = req.body;
+
+        // Validation check
+        if (!id || position == null) {
+            return res.status(400).json({
+                code: "error",
+                message: "Invalid input data!"
+            });
+        }
+
+        // Update operation
+        await ProductModel.updateOne(
+            { _id: id },
+            { position: position }
+        );
+
+        res.json({
+            code: "success",
+            message: "Đổi vị trí thành công!"
+        });
+    } catch (error) {
+        console.error("Error updating position:", error);
+        res.status(500).json({
+            code: "error",
+            message: "Có lỗi xảy ra, vui lòng thử lại!"
         });
     }
 };

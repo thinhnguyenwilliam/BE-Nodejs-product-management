@@ -2,9 +2,16 @@ const ProductModel = require("../../models/product.model");
 
 // Controller function for viewing products
 module.exports.viewProducts = async (req, res) => {
-    const danhSachSanPham = await ProductModel.find({
-        deleted: false
-    });
+    const danhSachSanPham = await ProductModel
+        .find({
+            status: 'active',
+            deleted: false
+        })
+        .sort({
+            position: -1,
+            title: 1,
+            price: -1
+        });
     //console.log('test xem có danh sách sản phẩm không: ',danhSachSanPham);
 
     // Calculate the new price for each product

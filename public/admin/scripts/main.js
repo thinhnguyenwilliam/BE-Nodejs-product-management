@@ -241,3 +241,38 @@ if (listButtonDelete.length > 0) {
   });
 }
 //
+
+
+// Đổi vị trí
+const listInputPosition = document.querySelectorAll("[input-position]");
+//console.log(listInputPosition);
+if (listInputPosition.length > 0) {
+  listInputPosition.forEach(input => {
+    input.addEventListener("change", () => {
+      const position = parseInt(input.value);
+      //console.log(position);
+
+      const id = input.getAttribute("item-id");
+      //console.log(id);
+      const path = input.getAttribute("data-path");
+      //console.log(path);
+      fetch(path, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify({
+          id: id,
+          position: position
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code === "success") {
+            location.reload();
+          }
+        })
+    })
+  })
+}
+// Hết Đổi vị trí
