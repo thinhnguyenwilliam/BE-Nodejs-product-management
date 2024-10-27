@@ -10,6 +10,19 @@ html
 
     link(rel="stylesheet", href="/admin/styles/style.css")
   body
+
+    if successMessage.length
+      div.alert.alert-success.alert-message(alert-message1)
+        each message in successMessage
+          p= message
+
+    if errorMessage.length
+      div.alert.alert-danger.alert-message(alert-message1)
+        each message in errorMessage
+          p= message
+
+
+
     include ../partials/header.pug
 
     .body

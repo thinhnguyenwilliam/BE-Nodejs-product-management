@@ -1,8 +1,10 @@
 require('dotenv').config();
 const express = require('express');//  imports the Express module
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
 const app = express();// initialize an Express application instance.
-const systemConfig=require('./config/system');
+const systemConfig = require('./config/system');
 
 
 // Accessing environment variables
@@ -14,7 +16,7 @@ const port = process.env.PORT || 9999;
 //lưu ý đặt tên collection(products) trong mongoDb
 const mongoUrl = process.env.MONGO_URL;
 //console.log(`cái đường dẫn ${mongoUrl} từ file .env`);
-const coSoDuLieu=require('./config/database');
+const coSoDuLieu = require('./config/database');
 coSoDuLieu.connect();
 
 
@@ -39,6 +41,27 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // parse application/json
 app.use(bodyParser.json());
+
+
+
+// Configure express-session middleware
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET, // Replace with a secure secret key
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+
+// Initialize flash
+app.use(flash());
+
+// Middleware to make flash messages available in all templates
+app.use((req, res, next) => {
+    res.locals.successMessage = req.flash('success');
+    res.locals.errorMessage = req.flash('error');
+    next();
+});
 
 
 

@@ -91,5 +91,21 @@
 }
 
 /* End Sider */
+.alert {
+  transition: opacity 3s ease;
+}
+.alert.fade-out {
+  opacity: 0;
+}
+
+/* alert-message */
+.alert-message {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  z-index: 9999;
+}
+
+/* End alert-message */
 
 /*# sourceMappingURL=style.css.map */

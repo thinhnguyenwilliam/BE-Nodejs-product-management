@@ -80,14 +80,15 @@ module.exports.changeStatus = async (req, res) => {
             { status: req.body.status } // Update: set the new status
         );
 
+        req.flash('success', 'Đổi trạng thái thành công!');
         // Send success response to the frontend
         res.json({
             code: "success",// want to reload page to update new status in DB
-            message: "Đổi trạng thái thành công!"
         });
 
     } catch (error) {
         // Handle any errors that may occur during the update process
+        req.flash('error', 'Update failed.');
         console.error('Error changing status:', error);
         res.status(500).json({
             code: "error",

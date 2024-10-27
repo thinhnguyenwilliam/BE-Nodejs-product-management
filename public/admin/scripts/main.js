@@ -276,3 +276,18 @@ if (listInputPosition.length > 0) {
   })
 }
 // Hết Đổi vị trí
+
+
+// alert-message
+const alertMessage = document.querySelector("[alert-message1]"); // Selecting by the correct attribute name
+if (alertMessage) {
+  setTimeout(() => {
+    alertMessage.classList.add('fade-out'); // Add the fade-out class for opacity transition
+    setTimeout(() => {
+      alertMessage.remove(); // Remove the element after it has faded out
+    }, parseFloat(getComputedStyle(alertMessage).transitionDuration) * 1000); // Match this to the fade duration
+  }, 3000); // Time to wait before starting fade-out
+}
+
+
+// End alert-message
