@@ -117,9 +117,9 @@ module.exports.changeStatusForMultiple = async (req, res) => {
                     { _id: { $in: ids } },
                     { deleted: true }
                 );
+                req.flash('success', 'Các sản phẩm đã được xóa mềm thành công!');
                 res.json({
                     code: "success",
-                    message: "Các sản phẩm đã được xóa mềm thành công!"
                 });
                 break;
 
@@ -130,9 +130,9 @@ module.exports.changeStatusForMultiple = async (req, res) => {
                     { _id: { $in: ids } },
                     { status: status, deleted: false }
                 );
+                req.flash('success', `Đổi trạng thái thành công cho nhiều sản phẩm thành ${status}!`);
                 res.json({
                     code: "success",
-                    message: `Đổi trạng thái thành công cho nhiều sản phẩm thành ${status}!`
                 });
                 break;
 
@@ -180,10 +180,10 @@ module.exports.deleteProduct = async (req, res) => {
             { deleted: true } // Set `deleted` to true
         );
 
+        req.flash('success', `Xóa sản phẩm thành công! ${productIds}!`);
         // Send success response to the frontend
         res.json({
             code: "success",
-            message: "Xóa sản phẩm thành công!"
         });
 
     } catch (error) {
@@ -260,10 +260,9 @@ module.exports.changePosition = async (req, res) => {
             { _id: id },
             { position: position }
         );
-
+        req.flash('success', 'Đổi vị trí thành công!');
         res.json({
             code: "success",
-            message: "Đổi vị trí thành công!"
         });
     } catch (error) {
         console.error("Error updating position:", error);

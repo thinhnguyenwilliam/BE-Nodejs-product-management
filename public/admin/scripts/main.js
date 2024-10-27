@@ -198,9 +198,9 @@ if (formChangeMulti) {
     })
       .then(res => res.json()) // Parse the response as JSON
       .then(data => {
-        console.log(data.message);
+        //console.log(data.message);
         if (data.code === "success") {
-          //location.reload(); // Reload the page to reflect changes on success
+          location.reload(); // Reload the page to reflect changes on success
         }
       })
       .catch(error => console.error('Error:', error)); // Handle any errors
