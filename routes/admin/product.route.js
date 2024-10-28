@@ -24,4 +24,8 @@ router.patch('/restore/:ids', productController.restoreProduct);
 
 router.patch("/change-position", productController.changePosition);
 
+
+router.get("/create", productController.create);
+router.post("/create", productController.createPost);
+
 module.exports = router;

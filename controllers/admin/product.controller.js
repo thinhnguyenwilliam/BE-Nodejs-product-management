@@ -272,3 +272,42 @@ module.exports.changePosition = async (req, res) => {
         });
     }
 };
+
+
+
+module.exports.create = async (req, res) => {
+    res.render("admin/pages/products/create", { //render following folder architect not URI
+        pageTitle: "Thêm mới sản phẩm"
+    });
+}
+
+module.exports.createPost = async (req, res) => {
+    try {
+        const { title, 
+            description, 
+            price, 
+            discountPercentage, 
+            stock, 
+            thumbnail, 
+            position, 
+            status 
+        } = req.body;
+
+        // Validate required fields
+        if (!title || !price) {
+            return res.status(400).json({ message: "Title and Price are required." });
+        }
+
+        // Save data to the database
+        // const newProduct = await ProductModel.create({ title, description, price, discountPercentage, stock, thumbnail, position, status });
+
+        console.log("Product data:", req.body);  // Log the product data
+        res.status(201).json({ message: "Product created successfully!" });  // Send success response
+
+    } catch (error) {
+        console.error("Error creating product:", error);
+        res.status(500).json({ message: "Server error. Please try again later." });
+    }
+};
+
+

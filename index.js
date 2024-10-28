@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');//  imports the Express module
-const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const app = express();// initialize an Express application instance.
@@ -40,8 +39,11 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 
 // parse application/json
-app.use(bodyParser.json());
+app.use(express.json());
 
+
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }));
 
 
 // Configure express-session middleware
