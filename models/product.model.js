@@ -39,7 +39,7 @@ const productSchema = new mongoose.Schema({
     },
     deleted: {
         type: Boolean,
-        default: true // Default value is true if not specified
+        default: false // Default value is false if not specified
     },
     thumbnail: {
         type: String,

@@ -1,4 +1,5 @@
 const ProductModel = require('../../models/product.model')
+const systemConfig = require("../../config/system");
 
 
 module.exports.viewProduct = async (req, res) => {
@@ -283,31 +284,23 @@ module.exports.create = async (req, res) => {
 
 module.exports.createPost = async (req, res) => {
     try {
-        const { title, 
-            description, 
-            price, 
-            discountPercentage, 
-            stock, 
-            thumbnail, 
-            position, 
-            status 
-        } = req.body;
+        // Parse integer values and use default position if not provided
+        const { price, discountPercentage, stock, position } = req.body;
+        const parsedData = {
+            ...req.body,
+            price: parseInt(price),
+            discountPercentage: parseInt(discountPercentage),
+            stock: parseInt(stock),
+            position: position ? parseInt(position) : await ProductModel.countDocuments() + 1
+        };
+        console.log(parsedData);
 
-        // Validate required fields
-        if (!title || !price) {
-            return res.status(400).json({ message: "Title and Price are required." });
-        }
+        const record = new ProductModel(parsedData);
+        await record.save();
 
-        // Save data to the database
-        // const newProduct = await ProductModel.create({ title, description, price, discountPercentage, stock, thumbnail, position, status });
-
-        console.log("Product data:", req.body);  // Log the product data
-        res.status(201).json({ message: "Product created successfully!" });  // Send success response
-
+        res.redirect(`/${systemConfig.prefixAdmin}/products`);
     } catch (error) {
         console.error("Error creating product:", error);
-        res.status(500).json({ message: "Server error. Please try again later." });
+        res.status(500).send("Internal Server Error");
     }
 };
-
-
