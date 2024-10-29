@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+const slug = require('mongoose-slug-updater');
+mongoose.plugin(slug);
+
+
 // Define a schema for the Product model
 const productSchema = new mongoose.Schema({
     title: {
@@ -7,10 +11,16 @@ const productSchema = new mongoose.Schema({
         required: true, // Ensure that title is provided
         trim: true      // Remove any leading or trailing whitespace
     },
+    slug: {
+        type: String,
+        slug: "title",
+        unique: true,
+        slugPaddingSize: 4   // Adds padding if duplicate slugs are generated
+    },
     description: {
         type: String,
-        required: true, 
-        trim: true      
+        required: true,
+        trim: true
     },
     price: {
         type: Number,
@@ -19,23 +29,23 @@ const productSchema = new mongoose.Schema({
     },
     discountPercentage: {
         type: Number,
-        required: true, 
-        min: 0          
+        required: true,
+        min: 0
     },
     stock: {
         type: Number,
-        required: true, 
-        min: 0          
+        required: true,
+        min: 0
     },
     status: {
         type: String,
-        required: true, 
-        trim: true      
+        required: true,
+        trim: true
     },
     position: {
         type: Number,
-        required: true, 
-        min: 0          
+        required: true,
+        min: 0
     },
     deleted: {
         type: Boolean,
@@ -49,14 +59,14 @@ const productSchema = new mongoose.Schema({
 }, {
     // Automatically add createdAt and updatedAt fields
     // which can be useful for tracking when documents are created or updated.
-    timestamps: true 
+    timestamps: true
 });
 
 
 
 // Create a model from the schema
 const ProductModel = mongoose.model(
-    'Product', 
+    'Product',
     productSchema,
     'products'// đảm bảo chọc vào đúng collection(products) trong mongoDB, nếu như mình kg cần thèm quan tâm tên collection
 );
