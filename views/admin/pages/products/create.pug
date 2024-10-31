@@ -65,7 +65,7 @@ block main
       )
 
     // Thumbnail URL Input
-    div(class="form-group")
+    div(class="form-group" upload-image)
       label(for="thumbnail") Ảnh
       input(
         type="file"
@@ -73,6 +73,12 @@ block main
         id="thumbnail"
         name="thumbnail_img_post"
         accept="image/*"
+        upload-image-input
+      )
+      img(
+        src=""
+        class="image-preview"
+        upload-image-preview
       )
 
     // Video URL Input
@@ -85,6 +91,7 @@ block main
         name="video_post"
         accept="video/*"
       )
+
     // ZIP File Input
     div(class="form-group")
       label(for="zipFile") Upload ZIP File

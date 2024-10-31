@@ -134,6 +134,7 @@
     opacity: 0;
   }
 }
+
 //
 
 /* alert-message */
@@ -143,4 +144,22 @@
   right: 20px;
   z-index: 9999;
 }
+
 /* End alert-message */
+
+/* image-preview */
+.image-preview {
+  width: $image-preview-width;
+  height: auto;
+  margin-top: 15px;
+  border: 1px solid $image-preview-border-color;
+  padding: $image-preview-padding;
+  border-radius: 5px;
+
+  // Hide the image preview when no source is set
+  &[src=""] {
+    display: none;
+  }
+}
+
+/* End image-preview */

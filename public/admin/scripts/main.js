@@ -288,6 +288,27 @@ if (alertMessage) {
     }, parseFloat(getComputedStyle(alertMessage).transitionDuration) * 1000); // Match this to the fade duration
   }, 3000); // Time to wait before starting fade-out
 }
-
-
 // End alert-message
+
+// Preview image
+const uploadImage = document.querySelector("[upload-image]");
+//console.log(uploadImage);
+if (uploadImage) {
+  const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
+  //console.log(uploadImageInput);
+  const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
+  //console.log(uploadImagePreview);
+
+  uploadImageInput.addEventListener("change", () => {
+    //console.log(uploadImageInput.files);
+    const file = uploadImageInput.files[0]; // Get the first file
+    //console.log(file);
+    if (file) 
+    {
+      const objectURL = URL.createObjectURL(file); // Create a URL for the selected file
+      uploadImagePreview.src = objectURL; // Set the image preview source
+      uploadImagePreview.style.display = 'block'; // Show the image preview
+    }
+  });
+}
+//
