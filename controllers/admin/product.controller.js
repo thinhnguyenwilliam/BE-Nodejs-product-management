@@ -291,9 +291,14 @@ module.exports.createPost = async (req, res) => {
             price: parseInt(price),
             discountPercentage: parseInt(discountPercentage),
             stock: parseInt(stock),
-            position: position ? parseInt(position) : await ProductModel.countDocuments() + 1
+            position: position ? parseInt(position) : await ProductModel.countDocuments() + 1,
+            thumbnail: req.file ? `/uploads/images/${req.file.filename}` : null // Corrected path
         };
-        console.log(parsedData);
+        //console.log(parsedData);
+        //console.log(req.file); //test send image
+        //res.send('Operation completed successfully'); // or use res.json({ message: 'Success' });
+   
+
 
         const record = new ProductModel(parsedData);
         await record.save();

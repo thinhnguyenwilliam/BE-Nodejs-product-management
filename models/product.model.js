@@ -55,6 +55,13 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true, // Ensure that thumbnail URL is provided
         trim: true      // Remove any leading or trailing whitespace
+    },
+    video: {
+        type: String,
+        trim: true
+    },
+    zipFile: {
+        type: String,
     }
 }, {
     // Automatically add createdAt and updatedAt fields

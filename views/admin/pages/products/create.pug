@@ -5,6 +5,7 @@ block main
   form(
     action=`/${prefixAdmin}/products/create`
     method="POST"
+    enctype="multipart/form-data"
   )
     // Title Input
     div(class="form-group")
@@ -67,10 +68,32 @@ block main
     div(class="form-group")
       label(for="thumbnail") Ảnh
       input(
-        type="text"
-        class="form-control"
+        type="file"
+        class="form-control-file"
         id="thumbnail"
-        name="thumbnail"
+        name="thumbnail_img_post"
+        accept="image/*"
+      )
+
+    // Video URL Input
+    div(class="form-group")
+      label(for="video") Video
+      input(
+        type="file"
+        class="form-control-file"
+        id="video"
+        name="video_post"
+        accept="video/*"
+      )
+    // ZIP File Input
+    div(class="form-group")
+      label(for="zipFile") Upload ZIP File
+      input(
+        type="file"
+        class="form-control-file"
+        id="zipFile"
+        name="zipFile_post"
+        accept=".zip"
       )
 
     // Position Input
@@ -84,6 +107,7 @@ block main
         placeholder="Tự động tăng"
         min="1"
       )
+      
 
     // Status Radio Buttons
     div(class="form-group form-check form-check-inline")
