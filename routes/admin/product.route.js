@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
+
 // Import the controller functions
 const productController = require('../../controllers/admin/product.controller');
 
@@ -12,8 +13,8 @@ const imageStorage = multer.diskStorage({
         cb(null, './public/uploads/images/'); // Folder to store images
     },
     filename: (req, file, cb) => {
-        const fileName  = `${Date.now()}-${file.originalname}`; // Keep original file name with timestamp
-        cb(null, fileName ); // No need to add file extension again
+        const fileName = `${Date.now()}-${file.originalname}`; // Keep original file name with timestamp
+        cb(null, fileName); // No need to add file extension again
     }
 });
 
@@ -28,8 +29,20 @@ const imageFilter = (req, file, cb) => {
 };
 //
 
-// Multer filter to accept only video files
-const videoStorage = (req, file, cb) => {
+
+// Multer configuration for video storage
+const videoStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './public/uploads/videos/'); // Folder to store videos
+    },
+    filename: (req, file, cb) => {
+        const fileName = `${Date.now()}-${file.originalname}`; // Keep original file name with timestamp
+        cb(null, fileName); // Save with original name and timestamp
+    }
+});
+
+// Multer file filter to allow only video files
+const videoFilter = (req, file, cb) => {
     const allowedTypes = ['video/mp4', 'video/avi', 'video/mov'];
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true); // Accept the file
@@ -37,9 +50,27 @@ const videoStorage = (req, file, cb) => {
         cb(new Error('Invalid file type. Only MP4, AVI, and MOV files are allowed.'), false);
     }
 };
+// Initialize multer for video uploads
+const uploadVideos = multer({
+    storage: videoStorage,
+    fileFilter: videoFilter,
+    limits: { fileSize: 100 * 1024 * 1024 } // Optional: limit file size to 100MB
+});
 
-// File filter to accept only ZIP files
-const zipStorage = (req, file, cb) => {
+
+// Multer configuration for ZIP file storage
+const zipStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './public/uploads/zips/'); // Folder to store ZIP files
+    },
+    filename: (req, file, cb) => {
+        const fileName = `${Date.now()}-${file.originalname}`; // Keep original file name with timestamp
+        cb(null, fileName); // Save with original name and timestamp
+    }
+});
+
+// Multer file filter to allow only ZIP files
+const zipFilter = (req, file, cb) => {
     if (file.mimetype === 'application/zip' || file.mimetype === 'application/x-zip-compressed') {
         cb(null, true); // Accept the file
     } else {
@@ -47,8 +78,15 @@ const zipStorage = (req, file, cb) => {
     }
 };
 
+// Initialize multer for ZIP uploads
+const uploadZips = multer({
+    storage: zipStorage,
+    fileFilter: zipFilter,
+    limits: { fileSize: 50 * 1024 * 1024 } // Optional: limit file size to 50MB
+});
+
 // Initialize multer with storage and filter configuration
-const upload = multer({
+const uploadImages = multer({
     storage: imageStorage,
     fileFilter: imageFilter,
     limits: { fileSize: 50 * 1024 * 1024 } // Optional: limit file size to 50MB
@@ -77,6 +115,6 @@ router.patch("/change-position", productController.changePosition);
 
 
 router.get("/create", productController.create);
-router.post("/create", upload.single('thumbnail_img_post'), productController.createPost);
+router.post("/create", uploadImages.single('thumbnail_img_post'), productController.createPost);
 
 module.exports = router;
