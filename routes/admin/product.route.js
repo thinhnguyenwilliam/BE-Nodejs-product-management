@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
-
 // Import the controller functions
 const productController = require('../../controllers/admin/product.controller');
+
+const productValidation = require('../../validates/admin/product.validate'); // Import the validation file
 
 
 // Multer configuration for image storage
@@ -115,6 +116,12 @@ router.patch("/change-position", productController.changePosition);
 
 
 router.get("/create", productController.create);
-router.post("/create", uploadImages.single('thumbnail_img_post'), productController.createPost);
+router.post(
+    "/create", 
+    uploadImages.single('thumbnail_img_post'),
+    productValidation.productValidationRules, // Apply validation rules
+    productValidation.validate, // Validate and handle errors
+    productController.createPost
+);
 
 module.exports = router;

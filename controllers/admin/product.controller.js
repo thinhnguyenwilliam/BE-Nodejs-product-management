@@ -2,6 +2,8 @@ const ProductModel = require('../../models/product.model')
 const systemConfig = require("../../config/system");
 
 
+
+
 module.exports.viewProduct = async (req, res) => {
     //req is object
     //req.query is object
@@ -282,6 +284,9 @@ module.exports.create = async (req, res) => {
     });
 }
 
+
+
+
 module.exports.createPost = async (req, res) => {
     try {
         // Parse integer values and use default position if not provided
@@ -297,7 +302,7 @@ module.exports.createPost = async (req, res) => {
         //console.log(parsedData);
         //console.log(req.file); //test send image
         //res.send('Operation completed successfully'); // or use res.json({ message: 'Success' });
-   
+
 
 
         const record = new ProductModel(parsedData);
