@@ -314,3 +314,63 @@ module.exports.createPost = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
+///
+
+module.exports.edit = async (req, res) => {
+    const id = req.params.id;
+    //console.log(req.params);
+    //console.log(id);
+    const product = await ProductModel.findOne({ _id: id, deleted: false });
+    //console.log(product);
+
+    if (!product) {
+        return res.status(404).send("Product not found");
+    }
+
+    res.render("admin/pages/products/edit", {
+        pageTitle: "Chỉnh sửa sản phẩm",
+        product: product
+    });
+};
+//
+
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+    try {
+        // Destructure and parse specific fields, and capture the rest
+        const {
+            price,
+            discountPercentage,
+            stock,
+            position
+        } = req.body;
+
+
+        // Parse numeric fields
+        const updateData = {
+            ...req.body,
+            price: parseInt(price),
+            discountPercentage: parseInt(discountPercentage),
+            stock: parseInt(stock),
+            position: position ? parseInt(position) : undefined,
+            thumbnail: req.file ? `/uploads/images/${req.file.filename}` : null
+        };
+
+
+        await ProductModel.updateOne(
+            { 
+                _id: id, 
+                deleted: false 
+            }
+            , updateData
+        );
+
+        req.flash("success", "Cập nhật thành công!");
+        res.redirect(req.get("Referrer") || "/");
+    } catch (error) {
+        console.error("Error updating product:", error);
+        req.flash("error", "Đã xảy ra lỗi khi cập nhật sản phẩm.");
+        res.redirect(req.get("Referrer") || "/");
+    }
+};

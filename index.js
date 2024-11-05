@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');//  imports the Express module
 const session = require('express-session');
 const flash = require('connect-flash');
+const methodOverride = require('method-override');
 const app = express();// initialize an Express application instance.
 const systemConfig = require('./config/system');
 
@@ -22,6 +23,11 @@ coSoDuLieu.connect();
 // nhúng file tĩnh, cái trong thư muc public(hình ảnh,css,js)
 // Serve static files from the "public" directory
 app.use(express.static('public'));
+
+
+
+// Override with a query parameter
+app.use(methodOverride('_method'));
 
 
 //Start PUG

@@ -117,11 +117,21 @@ router.patch("/change-position", productController.changePosition);
 
 router.get("/create", productController.create);
 router.post(
-    "/create", 
+    "/create",
     uploadImages.single('thumbnail_img_post'),
     productValidation.productValidationRules, // Apply validation rules
     productValidation.validate, // Validate and handle errors
     productController.createPost
 );
+
+router.get("/edit/:id", productController.edit);
+router.patch(
+    "/edit/:id",
+    uploadImages.single('thumbnail'),
+    productValidation.productValidationRules, // Apply validation rules
+    productValidation.validate, // Validate and handle errors
+    productController.editPatch
+);
+
 
 module.exports = router;
