@@ -46,3 +46,34 @@ module.exports.editProduct = (req, res) => {
 module.exports.deleteProduct = (req, res) => {
     res.render('client/pages/products/delete');
 };
+
+
+module.exports.detail = async (req, res) => {
+    const slug = req.params.slug;
+    try {
+        const product = await ProductModel.findOne({
+            slug: slug,
+            status: "active",
+            deleted: false
+        });
+
+        if (!product) {
+            return res.status(404).render("client/pages/products/not-found", {
+                pageTitle: "Product Not Found"
+            });
+        }
+
+        product.priceNew = (product.price * (100 - product.discountPercentage) / 100).toFixed(0);
+
+        res.render("client/pages/products/detail", {
+            pageTitle: product.title,
+            product: product
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render("client/pages/products/error", {
+            pageTitle: "System Error"
+        });
+    }
+}
+

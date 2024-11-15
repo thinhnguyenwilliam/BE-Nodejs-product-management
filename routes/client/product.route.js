@@ -16,5 +16,8 @@ router.patch('/edit', productController.editProduct);
 // Route for deleting a product
 router.delete('/delete', productController.deleteProduct);
 
+
+router.get("/detail/:slug", productController.detail);
+
 // Export the router
 module.exports = router;

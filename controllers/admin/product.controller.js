@@ -59,6 +59,7 @@ module.exports.viewProduct = async (req, res) => {
         });
     //console.log('test xem có danh sách sản phẩm không: ',danhSachSanPham);
 
+
     res.render('admin/pages/products/index', {
         pageTitle: 'Trang product của admin',
         danhSachVer2: danhSachSanPham,
@@ -359,9 +360,9 @@ module.exports.editPatch = async (req, res) => {
 
 
         await ProductModel.updateOne(
-            { 
-                _id: id, 
-                deleted: false 
+            {
+                _id: id,
+                deleted: false
             }
             , updateData
         );
@@ -374,3 +375,25 @@ module.exports.editPatch = async (req, res) => {
         res.redirect(req.get("Referrer") || "/");
     }
 };
+
+
+module.exports.detail = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const product = await ProductModel.findOne({ _id: id, deleted: false });
+        if (!product) {
+            return res.status(404).render("admin/pages/products/not-found", {
+                pageTitle: "Sản phẩm không tồn tại"
+            });
+        }
+        res.render("admin/pages/products/detail", {
+            pageTitle: "Chi tiết sản phẩm",
+            product: product
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render("admin/pages/products/error", {
+            pageTitle: "Lỗi hệ thống"
+        });
+    }
+}

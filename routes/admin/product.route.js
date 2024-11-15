@@ -134,4 +134,6 @@ router.patch(
 );
 
 
+router.get("/detail/:id", productController.detail);
+
 module.exports = router;

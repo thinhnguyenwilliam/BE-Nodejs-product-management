@@ -22,7 +22,7 @@ coSoDuLieu.connect();
 
 // nhúng file tĩnh, cái trong thư muc public(hình ảnh,css,js)
 // Serve static files from the "public" directory
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));
 
 
 
@@ -35,7 +35,7 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'pug');
 
 // Set the directory where the Pug templates are located
-app.set('views', './views');
+app.set('views', `${__dirname}/views`);
 //End PUG
 
 
