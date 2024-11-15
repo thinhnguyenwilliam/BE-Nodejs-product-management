@@ -52,9 +52,7 @@ const productSchema = new mongoose.Schema({
         default: false // Default value is false if not specified
     },
     thumbnail: {
-        type: String,
-        required: true, // Ensure that thumbnail URL is provided
-        trim: true      // Remove any leading or trailing whitespace
+        type: String
     },
     video: {
         type: String,

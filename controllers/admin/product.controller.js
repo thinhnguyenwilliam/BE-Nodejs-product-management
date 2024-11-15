@@ -297,8 +297,7 @@ module.exports.createPost = async (req, res) => {
             price: parseInt(price),
             discountPercentage: parseInt(discountPercentage),
             stock: parseInt(stock),
-            position: position ? parseInt(position) : await ProductModel.countDocuments() + 1,
-            thumbnail: req.file ? `/uploads/images/${req.file.filename}` : null // Corrected path
+            position: position ? parseInt(position) : await ProductModel.countDocuments() + 1
         };
         //console.log(parsedData);
         //console.log(req.file); //test send image
@@ -354,8 +353,7 @@ module.exports.editPatch = async (req, res) => {
             price: parseInt(price),
             discountPercentage: parseInt(discountPercentage),
             stock: parseInt(stock),
-            position: position ? parseInt(position) : undefined,
-            thumbnail: req.file ? `/uploads/images/${req.file.filename}` : null
+            position: position ? parseInt(position) : undefined
         };
 
 
