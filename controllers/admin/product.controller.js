@@ -1,72 +1,76 @@
-const ProductModel = require('../../models/product.model')
+const ProductModel = require('../../models/product.model');
 const systemConfig = require("../../config/system");
 
-
-
-
 module.exports.viewProduct = async (req, res) => {
-    //req is object
-    //req.query is object
-    // object in object
-    //phần lọc filter xem thêm cách mình làm
+    // Filter
+    const objectFind = { deleted: false };
 
-    ///// Filter
-    const objectFind = {
-        deleted: false
-    };
+    if (req.query.status) objectFind.status = req.query.status;
 
-
-    if (req.query.status)
-        objectFind.status = req.query.status;
-    //console.log(objectFind);
-    //////////// End Filter
-
-
-    // search
+    // Search
     if (req.query.keyword) {
-        const regex = new RegExp(req.query.keyword, "i");//"i" flag: Case-insensitive search: Tìm kiếm không phân biệt chữ hoa chữ thường
+        const regex = new RegExp(req.query.keyword, "i"); // Case-insensitive search
         objectFind.title = regex;
     }
-    //end search
 
-
-    //pagination
+    // Pagination
     const page = parseInt(req.query.page) || 1;
-    //console.log(page);
+    let pageSize = 4; // Default number of products per page
+    if (req.query.limit) pageSize = parseInt(req.query.limit);
+    const skip = (page - 1) * pageSize;
 
-    const pageSize = 4; // Number of products per page
-    if (req.query.limit)
-        pageSize = parseInt(req.query.limit);
+    // Multi-Field Sorting
+    let sort = {};
+    if (req.query.sortBy) {
+        const sortFields = req.query.sortBy.split(','); // Split by comma to allow multiple fields
+        const sortOrders = req.query.sortOrder ? req.query.sortOrder.split(',') : []; // Split sortOrder if provided
 
-    const skip = (page - 1) * pageSize;// bắt đầu từ vị trí 0 trong database    
-    //end pagination
-
-
-
-    // Count total products
-    const totalProducts = await ProductModel.countDocuments(objectFind);
-    const totalPages = Math.ceil(totalProducts / pageSize);
-
-    // Fetch products for the current page
-    const danhSachSanPham = await ProductModel
-        .find(objectFind)
-        .skip(skip)
-        .limit(pageSize)
-        .sort({
-            position: -1,
-            title: 1,
-            price: -1
+        sortFields.forEach((field, index) => {
+            const order = sortOrders[index] === 'asc' ? 1 : -1; // Default to descending if not specified
+            sort[field] = order;
         });
-    //console.log('test xem có danh sách sản phẩm không: ',danhSachSanPham);
+    } else {
+        // Default sorting
+        sort = { position: -1, title: 1, price: -1 };
+    }
 
+    try {
+        // Count total products
+        const totalProducts = await ProductModel.countDocuments(objectFind);
+        const totalPages = Math.ceil(totalProducts / pageSize);
 
-    res.render('admin/pages/products/index', {
-        pageTitle: 'Trang product của admin',
-        danhSachVer2: danhSachSanPham,
-        currentPage: page,
-        totalPage: totalPages
-    });
+        // Fetch products for the current page
+        const products = await ProductModel
+            .find(objectFind)
+            .skip(skip)
+            .limit(pageSize)
+            .sort(sort);
+
+        // Return JSON response
+        res.json({
+            success: true,
+            message: "Products fetched successfully",
+            data: {
+                products,
+                pagination: {
+                    currentPage: page,
+                    totalPages,
+                    pageSize,
+                    totalProducts,
+                }
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error.message,
+        });
+    }
 };
+
+
 
 
 module.exports.changeStatus = async (req, res) => {
