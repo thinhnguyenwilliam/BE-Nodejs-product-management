@@ -8,9 +8,8 @@ const controller = require("../../controllers/admin/product-category.controller"
 
 const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
 
-//router.get("/", controller.index);
+router.get("/", controller.viewPrductsCategory);
 
-router.get("/create", controller.create);
 
 router.post(
     "/create",
@@ -18,5 +17,10 @@ router.post(
     //uploadCloud.uploadSingle,
     controller.createPost
 );
+
+
+
+router.get("/edit/:id", controller.edit);
+router.patch("/edit/:id", controller.editPatch);
 
 module.exports = router;

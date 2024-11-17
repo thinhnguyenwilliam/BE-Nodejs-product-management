@@ -1,6 +1,6 @@
 const ProductCategory = require("../../models/product-category.model");
 
-module.exports.create = async (req, res) => {
+module.exports.viewPrductsCategory = async (req, res) => {
     try {
         const listCategory = await ProductCategory.find({ deleted: false });
 
@@ -49,3 +49,74 @@ module.exports.createPost = async (req, res) => {
         });
     }
 };
+
+
+
+module.exports.edit = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const category = await ProductCategory.findById(id);
+
+        if (!category || category.deleted) {
+            return res.status(404).json({
+                success: false,
+                message: "Product category not found or has been deleted",
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Product category fetched successfully",
+            data: category,
+        });
+    } catch (error) {
+        console.error("Error fetching category for edit:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error.message,
+        });
+    }
+};
+
+
+module.exports.editPatch = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+
+        // Ensure position is an integer if provided
+        if (updates.position) {
+            updates.position = parseInt(updates.position);
+        }
+
+        const updatedCategory = await ProductCategory.findByIdAndUpdate(
+            id,
+            updates,
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({
+                success: false,
+                message: "Product category not found",
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Product category updated successfully",
+            data: updatedCategory,
+        });
+    } catch (error) {
+        console.error("Error updating product category:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error.message,
+        });
+    }
+};
+
+
