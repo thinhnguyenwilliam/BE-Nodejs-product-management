@@ -1,4 +1,5 @@
 const ProductModel = require('../../models/product.model');
+const ProductCategory = require("../../models/product-category.model");
 const systemConfig = require("../../config/system");
 
 module.exports.viewProduct = async (req, res) => {
@@ -284,8 +285,13 @@ module.exports.changePosition = async (req, res) => {
 
 
 module.exports.create = async (req, res) => {
+    const listCategory = await ProductCategory.find({
+        deleted: false
+    });
+
     res.render("admin/pages/products/create", { //render following folder architect not URI
-        pageTitle: "Thêm mới sản phẩm"
+        pageTitle: "Thêm mới sản phẩm",
+        listCategory:listCategory
     });
 }
 
@@ -293,6 +299,7 @@ module.exports.create = async (req, res) => {
 
 
 module.exports.createPost = async (req, res) => {
+    console.log(req.body);
     try {
         // Parse integer values and use default position if not provided
         const { price, discountPercentage, stock, position } = req.body;

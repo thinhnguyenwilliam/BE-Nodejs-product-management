@@ -60,6 +60,9 @@ const productSchema = new mongoose.Schema({
     },
     zipFile: {
         type: String,
+    },
+    category_id: {
+        type: String
     }
 }, {
     // Automatically add createdAt and updatedAt fields
