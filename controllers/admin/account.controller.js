@@ -145,3 +145,80 @@ module.exports.editPatch = async (req, res) => {
         });
     }
 };
+
+
+module.exports.changePassword = async (req, res) => {
+    try {
+        // Find the account by ID and ensure it is not marked as deleted
+        const account = await Account.findOne({
+            _id: req.params.id,
+            deleted: false
+        });
+
+        // If the account is not found
+        if (!account) {
+            return res.status(404).json({
+                success: false,
+                message: "Account not found."
+            });
+        }
+
+        // Send back the account and page title as a JSON response
+        res.status(200).json({
+            success: true,
+            pageTitle: "Đổi mật khẩu",
+            account: account
+        });
+    } catch (err) {
+        console.error("Error fetching account:", err);
+        res.status(500).json({
+            success: false,
+            message: "Failed to retrieve account."
+        });
+    }
+};
+
+module.exports.changePasswordPatch = async (req, res) => {
+    try {
+        // Check if the password field is provided in the request
+        if (!req.body.password) {
+            return res.status(400).json({
+                success: false,
+                message: "Password is required.",
+            });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+        // Update the password for the account
+        const result = await Account.updateOne(
+            {
+                _id: req.params.id,
+                deleted: false,
+            },
+            {
+                password: hashedPassword,
+            }
+        );
+
+        // Check if any document was modified
+        if (result.modifiedCount > 0) {
+            return res.status(200).json({
+                success: true,
+                message: "Password updated successfully.",
+            });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: "Account not found or no changes made.",
+            });
+        }
+    } catch (err) {
+        console.error("Error updating password:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to update password.",
+        });
+    }
+};
