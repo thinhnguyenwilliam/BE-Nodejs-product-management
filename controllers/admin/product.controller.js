@@ -1,8 +1,12 @@
 const ProductModel = require('../../models/product.model');
 const ProductCategory = require("../../models/product-category.model");
 const systemConfig = require("../../config/system");
+const moment = require("moment");
+const Account = require("../../models/account.model");
 
 module.exports.viewProduct = async (req, res) => {
+
+
     // Filter
     const objectFind = { deleted: false };
 
@@ -47,12 +51,32 @@ module.exports.viewProduct = async (req, res) => {
             .limit(pageSize)
             .sort(sort);
 
+
+        // Fetch account details for `createdBy`
+        const createdByIds = products.map((item) => item.createdBy);
+        const accounts = await Account.find({ _id: { $in: createdByIds } });
+        const accountMap = accounts.reduce((map, account) => {
+            map[account._id] = account.fullName;
+            return map;
+        }, {});
+
+        // Enrich product data
+        const enrichedProducts = products.map((item) => {
+            return {
+                ...item._doc,
+                createdByFullName: accountMap[item.createdBy] || "",
+                createdAtFormat: item.createdAt
+                    ? moment(item.createdAt).format("HH:mm - DD/MM/YY")
+                    : "",
+            };
+        });
+
         // Return JSON response
         res.json({
             success: true,
             message: "Products fetched successfully",
             data: {
-                products,
+                enrichedProducts,
                 pagination: {
                     currentPage: page,
                     totalPages,
@@ -291,7 +315,7 @@ module.exports.create = async (req, res) => {
 
     res.render("admin/pages/products/create", { //render following folder architect not URI
         pageTitle: "Thêm mới sản phẩm",
-        listCategory:listCategory
+        listCategory: listCategory
     });
 }
 
@@ -299,27 +323,36 @@ module.exports.create = async (req, res) => {
 
 
 module.exports.createPost = async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     try {
-        // Parse integer values and use default position if not provided
-        const { price, discountPercentage, stock, position } = req.body;
+
+        if (!req.role || !Array.isArray(req.role.permissions) || !req.role.permissions.includes("write")) {
+            return res.status(403).json({
+                success: false,
+                message: "Forbidden: You do not have the required permissions to perform this action.",
+            });
+        }
+
+
+        // Parse and validate input data
+        const position = req.body.position
+            ? parseInt(req.body.position)
+            : await ProductModel.countDocuments() + 1;
+
         const parsedData = {
             ...req.body,
-            price: parseInt(price),
-            discountPercentage: parseInt(discountPercentage),
-            stock: parseInt(stock),
-            position: position ? parseInt(position) : await ProductModel.countDocuments() + 1
+            price: parseInt(req.body.price),
+            discountPercentage: parseInt(req.body.discountPercentage),
+            stock: parseInt(req.body.stock),
+            position,
+            createdBy: req.user.id, // Add createdBy from the authenticated user
         };
-        //console.log(parsedData);
-        //console.log(req.file); //test send image
-        //res.send('Operation completed successfully'); // or use res.json({ message: 'Success' });
-
 
 
         const record = new ProductModel(parsedData);
         await record.save();
 
-        res.redirect(`/${systemConfig.prefixAdmin}/products`);
+        res.redirect(`/${systemConfig.prefixAdmin}/products`);// response json like this url
     } catch (error) {
         console.error("Error creating product:", error);
         res.status(500).send("Internal Server Error");

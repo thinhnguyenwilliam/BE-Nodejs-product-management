@@ -5,7 +5,11 @@ const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const app = express();// initialize an Express application instance.
 const systemConfig = require('./config/system');
+const cookieParser = require("cookie-parser");
 
+
+// Use cookie-parser middleware to parse cookies in the request
+app.use(cookieParser());
 
 // Accessing environment variables
 const port = process.env.PORT || 9999;

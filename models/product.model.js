@@ -63,6 +63,9 @@ const productSchema = new mongoose.Schema({
     },
     category_id: {
         type: String
+    },
+    createdBy: {
+        type: String
     }
 }, {
     // Automatically add createdAt and updatedAt fields

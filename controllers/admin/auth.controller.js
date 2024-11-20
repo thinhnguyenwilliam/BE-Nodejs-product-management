@@ -69,3 +69,13 @@ module.exports.loginPost = async (req, res) => {
         });
     }
 };
+
+
+
+module.exports.logout = (req, res) => {
+    res.clearCookie("token");
+    res.status(200).json({
+        success: true,
+        message: "Logout successful",
+    });
+};

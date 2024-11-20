@@ -2,6 +2,15 @@ const ProductCategory = require("../../models/product-category.model");
 
 module.exports.viewPrductsCategory = async (req, res) => {
     try {
+        //Check if the role has "read" permission
+        if (!req.role.permissions.includes("read")) {
+            return res.status(403).json({
+                success: false,
+                message: "Forbidden: You do not have the required permissions to perform this action.",
+            });
+        }
+
+
         const listCategory = await ProductCategory.find({ deleted: false });
 
         res.json({
